@@ -1,0 +1,72 @@
+<section class="hero-dual">
+  <div class="container">
+    <h1 class="hero-title">
+      <span class="theme-rescue">🐕 Animal Rescue</span>
+      <span class="divider">|</span>
+      <span class="theme-adoption">🏠 Adoption &amp; Care</span>
+    </h1>
+    <p class="hero-subtitle">Every animal deserves a safe home and loving family</p>
+
+    <div class="theme-entries">
+      <article class="theme-card theme-rescue-card">
+        <img src="assets/P-01.jpg" alt="Animal rescue shelter" class="theme-image">
+        <div class="theme-content">
+          <h2>Animal Rescue</h2>
+          <p>Emergency rescue and safe intake for animals in need.</p>
+          <a [routerLink]="['/search']" [queryParams]="{ category: 'Rescue' }" class="btn btn-primary">View Rescue Services</a>
+        </div>
+      </article>
+
+      <article class="theme-card theme-adoption-card">
+        <img src="assets/AC-01.jpg" alt="Pet adoption event" class="theme-image">
+        <div class="theme-content">
+          <h2>Adoption &amp; Care</h2>
+          <p>Find your perfect companion and give them a forever home.</p>
+          <a [routerLink]="['/search']" [queryParams]="{ category: 'Adoption' }" class="btn btn-primary">View Adoption Services</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="services-section">
+  <div class="container">
+    <h2>Our Services</h2>
+    <div class="service-chips">
+      <a [routerLink]="['/search']" [queryParams]="{ service: 'rescue-support' }" class="service-chip">🚑 Rescue Support</a>
+      <a [routerLink]="['/search']" [queryParams]="{ service: 'adoption-guidance' }" class="service-chip">🏠 Adoption Guidance</a>
+      <a [routerLink]="['/search']" [queryParams]="{ service: 'foster-care' }" class="service-chip">🤝 Foster Care</a>
+      <a [routerLink]="['/search']" [queryParams]="{ service: 'shelter-shift' }" class="service-chip">🧹 Shelter Shift</a>
+    </div>
+  </div>
+</section>
+
+<section class="featured-section">
+  <div class="container">
+    <h2>Current and Upcoming Services</h2>
+    <div id="featured-events" class="events-grid" aria-live="polite">
+      @switch (state) {
+        @case ('loading') {
+          <div class="loading">Loading services...</div>
+        }
+        @case ('empty') {
+          <div class="empty-state">
+            <img src="assets/empty-state.svg" alt="" role="presentation">
+            <p>No services scheduled at the moment.</p>
+          </div>
+        }
+        @case ('error') {
+          <div class="alert alert-error" role="alert">Failed to load services. Please try again later.</div>
+        }
+        @default {
+          @for (event of events; track event.id) {
+            <app-event-card [event]="event"></app-event-card>
+          }
+        }
+      }
+    </div>
+    <div class="section-footer">
+      <a [routerLink]="['/search']" class="btn btn-secondary">View All Services</a>
+    </div>
+  </div>
+</section>
