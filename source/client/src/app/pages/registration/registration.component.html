@@ -1,0 +1,138 @@
+<div class="container">
+  <a [routerLink]="['/search']" class="back-link">← Back to Services</a>
+
+  <div class="registration-page">
+    <div id="event-summary" class="event-summary" aria-live="polite">
+      @switch (state) {
+        @case ('loading') {
+          <div class="loading">Loading service...</div>
+        }
+        @case ('error') {
+          <div class="alert alert-error" role="alert">{{ summaryError }}</div>
+        }
+        @default {
+          @if (event; as e) {
+            <div class="event-summary-card">
+              <img [src]="'assets/' + e.image" [alt]="e.title" class="summary-image">
+              <div class="summary-content">
+                <h3>{{ e.title }}</h3>
+                <div class="summary-meta">
+                  <span>📅 {{ e.date | formatDate }}</span>
+                  <span>📍 {{ e.location }}</span>
+                  <span>💰 {{ e.price }}</span>
+                </div>
+                @if (e.serviceType) {
+                  <span class="service-badge">{{ e.serviceType }}</span>
+                }
+              </div>
+            </div>
+          }
+        }
+      }
+    </div>
+
+    <section class="registration-form-section">
+      <h2>Reserve a Place</h2>
+
+      <form id="registration-form" novalidate [class.hidden]="formHidden" (ngSubmit)="submit()">
+        <div class="form-group">
+          <label for="reg-name" class="form-label">Full Name <span aria-label="required">*</span></label>
+          <input
+            type="text"
+            id="reg-name"
+            name="name"
+            class="form-input"
+            required
+            minlength="2"
+            maxlength="100"
+            placeholder="Enter your full name"
+            [(ngModel)]="form.name"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="reg-email" class="form-label">Email <span aria-label="required">*</span></label>
+          <input
+            type="email"
+            id="reg-email"
+            name="email"
+            class="form-input"
+            required
+            placeholder="your@email.com"
+            [(ngModel)]="form.email"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="reg-phone" class="form-label">Phone <span aria-label="required">*</span></label>
+          <input
+            type="tel"
+            id="reg-phone"
+            name="phone"
+            class="form-input"
+            required
+            placeholder="0412 345 678"
+            [(ngModel)]="form.phone"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="reg-quantity" class="form-label">Places Required <span aria-label="required">*</span></label>
+          <select
+            id="reg-quantity"
+            name="quantity"
+            class="form-select"
+            required
+            [(ngModel)]="form.quantity"
+          >
+            <option value="">Select number of places</option>
+            @for (n of quantities; track n) {
+              <option [value]="n">{{ n }}</option>
+            }
+          </select>
+        </div>
+
+        <fieldset class="form-fieldset">
+          <legend class="form-label">Do you have pet experience?</legend>
+          <div class="form-radio-group">
+            <label class="form-check">
+              <input type="radio" name="petExperience" value="yes" [(ngModel)]="form.petExperience">
+              <span>Yes</span>
+            </label>
+            <label class="form-check">
+              <input type="radio" name="petExperience" value="no" [(ngModel)]="form.petExperience">
+              <span>No</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-fieldset">
+          <legend class="form-label">Pet types you are interested in</legend>
+          <div class="form-radio-group">
+            @for (type of petTypeOptions; track type) {
+              <label class="form-check">
+                <input type="checkbox" name="petTypes" [value]="type" [checked]="isPetTypeSelected(type)" (change)="togglePetType(type)">
+                <span>{{ type }}</span>
+              </label>
+            }
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="btn-submit" [disabled]="submitting">
+            {{ submitting ? 'Submitting...' : 'Submit Reservation' }}
+          </button>
+          <a [routerLink]="['/search']" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+
+      <div id="registration-success" class="alert alert-success" [class.hidden]="!success" role="status">
+        <strong>Reservation Confirmed!</strong>
+        <p>{{ successText }}</p>
+        <a [routerLink]="['/search']" class="btn btn-secondary btn-sm mt-lg">View More Services</a>
+      </div>
+
+      <div #errorBox id="registration-error" class="alert alert-error" [class.hidden]="!errorMessage" role="alert">{{ errorMessage }}</div>
+    </section>
+  </div>
+</div>
